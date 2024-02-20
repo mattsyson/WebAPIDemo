@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 using WebAPIDemo.Services.SuperHeroService;
@@ -30,14 +31,14 @@ namespace WebAPIDemo.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{id}")]
+        [HttpPost("{id}"), Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<List<SuperHero>>> AddHero(SuperHero hero)
         {
             var result = await _superHeroService.AddHero(hero);
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public async Task<ActionResult<List<SuperHero>>> UpdateHero(int id, SuperHero request)
         {
             var result = await _superHeroService.UpdateHero(id, request);
@@ -46,7 +47,7 @@ namespace WebAPIDemo.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<SuperHero>> DeleteHero(int id)
         {
             var result = await _superHeroService.DeleteHero(id);
